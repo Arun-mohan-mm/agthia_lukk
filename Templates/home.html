@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger Inn</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .logo {
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 150px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-group button {
+            width: 48%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .form-group .submit-button {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .form-group .submit-button:hover {
+            background-color: #218838;
+        }
+        .form-group .cancel-button {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        .form-group .cancel-button:hover {
+            background-color: #c82333;
+        }
+        .switch-button {
+            margin-bottom: 20px;
+        }
+    </style>
+    <script>
+        function switchLanguage() {
+            var labels = document.querySelectorAll('.form-group label');
+            var inputs = document.querySelectorAll('.form-group input');
+            var submitButton = document.querySelector('.submit-button');
+            var cancelButton = document.querySelector('.cancel-button');
+            var switchButton = document.querySelector('.switch-button');
+
+            if (switchButton.innerText === 'التبديل إلى العربية') {
+                labels[0].innerText = 'الاسم:';
+                labels[1].innerText = 'الرقم المدني:';
+                labels[2].innerText = 'الهاتف:';
+                labels[3].innerText = 'رقم الإيصال:';
+                labels[4].innerText = 'رقم القسيمة:';
+
+                inputs.forEach(input => {
+                    input.setAttribute('dir', 'rtl');
+                    input.setAttribute('lang', 'ar');
+                    input.placeholder = input.previousElementSibling.innerText.replace(':', '');
+                });
+
+                submitButton.innerText = 'إرسال';
+                cancelButton.innerText = 'إلغاء';
+                switchButton.innerText = 'Switch to English';
+            } else {
+                labels[0].innerText = 'Name:';
+                labels[1].innerText = 'Civil ID:';
+                labels[2].innerText = 'Phone:';
+                labels[3].innerText = 'Receipt Number:';
+                labels[4].innerText = 'Voucher Number:';
+
+                inputs.forEach(input => {
+                    input.removeAttribute('dir');
+                    input.removeAttribute('lang');
+                    input.placeholder = input.previousElementSibling.innerText.replace(':', '');
+                });
+
+                submitButton.innerText = 'Submit';
+                cancelButton.innerText = 'Cancel';
+                switchButton.innerText = 'التبديل إلى العربية';
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo">
+        <img src="{% static 'burger_inn.jpeg' %}" alt="Logo">
+    </div>
+    <button class="switch-button" onclick="switchLanguage()">التبديل إلى العربية</button>
+    <form action="{% url 'home' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="civil-id">Civil ID:</label>
+            <input type="text" id="civil-id" name="civil_id" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="receipt-number">Receipt Number:</label>
+            <input type="text" id="receipt-number" name="receipt_number" required>
+        </div>
+        <div class="form-group">
+            <label for="voucher-number">Voucher Number:</label>
+            <input type="text" id="voucher-number" name="voucher_number" required>
+        </div>
+        <div class="form-group buttons">
+            <button type="submit" class="submit-button">Submit</button>
+            <button type="reset" class="cancel-button">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    {% if messages %}
+        {% for msg in messages %}
+                alert("{{ msg }}");
+        {% endfor %}
+    {% endif %}
+</script>
+
+</body>
+</html>
